@@ -2,6 +2,7 @@ package main
 
 import (
 	"apiserver/config"
+	"apiserver/model"
 	"apiserver/router"
 	"errors"
 	"flag"
@@ -43,6 +44,10 @@ func main() {
 	if err := config.Init(cfg); err != nil {
 		panic(err)
 	}
+
+	// init db
+	model.DB.Init()
+	defer model.DB.Close()
 
 	gin.SetMode(viper.GetString("runmode"))
 	// Create the Gin engine.
