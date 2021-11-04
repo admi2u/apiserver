@@ -3,11 +3,15 @@ package main
 import (
 	"apiserver/config"
 	"apiserver/model"
+	v "apiserver/pkg/version"
 	"apiserver/router"
 	"apiserver/router/middleware"
+	"encoding/json"
 	"errors"
 	"flag"
+	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -32,15 +36,28 @@ func pingServer() error {
 }
 
 var (
-	cfg string
+	cfg     string
+	version bool
 )
 
 func init() {
 	flag.StringVar(&cfg, "c", "", "apiserver config file path.")
+	flag.BoolVar(&version, "v", false, "show version info")
 }
 
 func main() {
 	flag.Parse()
+	if version {
+		versionInfo := v.Get()
+		data, err := json.MarshalIndent(&versionInfo, "", "")
+		if err != nil {
+			fmt.Printf("%v\n", err)
+			os.Exit(1)
+		}
+		fmt.Println(string(data))
+		return
+	}
+
 	// init config
 	if err := config.Init(cfg); err != nil {
 		panic(err)
