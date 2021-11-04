@@ -6,11 +6,14 @@ import (
 	"apiserver/router/middleware"
 	"net/http"
 
+	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 )
 
 // Load loads the middlewares, routes, handlers.
 func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
+	// 加入gin性能分析中间件
+	pprof.Register(g)
 	// Middlewares.
 	g.Use(gin.Recovery())
 	g.Use(middleware.NoCache)
