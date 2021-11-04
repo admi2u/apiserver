@@ -47,5 +47,8 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		svcd.GET("/ram", sd.RAMCheck)
 	}
 
+	// serve static file
+	g.StaticFile("/profile001.svg", "./util/profile001.svg")
+
 	return g
 }
