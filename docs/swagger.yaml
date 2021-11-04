@@ -146,49 +146,7 @@ paths:
       summary: Checks the ram usage
       tags:
       - sd
-  /user:
-    post:
-      consumes:
-      - application/json
-      description: Add a new user
-      parameters:
-      - description: Create a new user
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/user.CreateRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code":0,"message":"OK","data":{"username":"kong"}}'
-          schema:
-            $ref: '#/definitions/user.CreateResponse'
-      summary: Add new user to the database
-      tags:
-      - user
   /user/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete user by ID
-      parameters:
-      - description: The user's database id index num
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code":0,"message":"OK","data":null}'
-          schema:
-            $ref: '#/definitions/handler.Response'
-      summary: Delete an user by the user identifier
-      tags:
-      - user
     put:
       consumes:
       - application/json
@@ -212,6 +170,8 @@ paths:
           description: '{"code":0,"message":"OK","data":null}'
           schema:
             $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
       summary: Update a user info by the user identifier
       tags:
       - user
@@ -220,13 +180,6 @@ paths:
       consumes:
       - application/json
       description: List users
-      parameters:
-      - default: Bearer <Add access token here>
-        description: Insert your access token
-        in: header
-        name: Authorization
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -236,7 +189,55 @@ paths:
             00:25:33","updatedAt":"2018-05-28 00:25:33"}]}}'
           schema:
             $ref: '#/definitions/user.ListResponse'
+      security:
+      - ApiKeyAuth: []
       summary: List the users in the database
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      description: Add a new user
+      parameters:
+      - description: Create a new user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.CreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{"username":"kong"}}'
+          schema:
+            $ref: '#/definitions/user.CreateResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Add new user to the database
+      tags:
+      - user
+  /v1/user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user by ID
+      parameters:
+      - description: The user's database id index num
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":null}'
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete an user by the user identifier
       tags:
       - user
   /v1/user/{username}:
@@ -257,7 +258,14 @@ paths:
           description: '{"code":0,"message":"OK","data":{"username":"kong","password":"$2a$10$E0kwtmtLZbwW/bDQ8qI8e.eHPqhQOW9tvjwpyo/p05f/f4Qvr3OmS"}}'
           schema:
             $ref: '#/definitions/model.UserModel'
+      security:
+      - ApiKeyAuth: []
       summary: Get an user by the user identifier
       tags:
       - user
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: bearer
+    type: apiKey
 swagger: "2.0"

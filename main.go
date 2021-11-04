@@ -48,12 +48,14 @@ func init() {
 // @title Apiserver Example API
 // @version 1.0
 // @description apiserver demo
-
 // @contact.name admi2u
 // @contact.url http://www.swagger.io/support
 // @contact.email admi2u@qq.com
-
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name bearer
 // @host localhost:8080
+// @BathPath /
 func main() {
 	flag.Parse()
 	if version {

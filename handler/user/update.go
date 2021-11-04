@@ -18,6 +18,7 @@ import (
 // @Tags user
 // @Accept  json
 // @Produce  json
+// @Security ApiKeyAuth
 // @Param id path uint64 true "The user's database id index num"
 // @Param user body model.UserModel true "The user info"
 // @Success 200 {object} handler.Response "{"code":0,"message":"OK","data":null}"
