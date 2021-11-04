@@ -45,6 +45,15 @@ func init() {
 	flag.BoolVar(&version, "v", false, "show version info")
 }
 
+// @title Apiserver Example API
+// @version 1.0
+// @description apiserver demo
+
+// @contact.name admi2u
+// @contact.url http://www.swagger.io/support
+// @contact.email admi2u@qq.com
+
+// @host localhost:8080
 func main() {
 	flag.Parse()
 	if version {

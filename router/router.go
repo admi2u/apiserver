@@ -1,6 +1,7 @@
 package router
 
 import (
+	_ "apiserver/docs"
 	"apiserver/handler/sd"
 	"apiserver/handler/user"
 	"apiserver/router/middleware"
@@ -8,12 +9,12 @@ import (
 
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 // Load loads the middlewares, routes, handlers.
 func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
-	// 加入gin性能分析中间件
-	pprof.Register(g)
 	// Middlewares.
 	g.Use(gin.Recovery())
 	g.Use(middleware.NoCache)
@@ -24,6 +25,12 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	g.NoRoute(func(c *gin.Context) {
 		c.String(http.StatusNotFound, "The incorrect API route.")
 	})
+
+	// swagger api docs
+	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// 加入gin性能分析中间件
+	pprof.Register(g)
 
 	g.POST("/login", user.Login)
 
@@ -39,7 +46,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	}
 
 	// The health check handlers
-	svcd := g.Group("/sd")
+	svcd := g.Group("sd")
 	{
 		svcd.GET("/health", sd.HealthCheck)
 		svcd.GET("/disk", sd.DiskCheck)
